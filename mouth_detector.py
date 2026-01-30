@@ -3,12 +3,10 @@ import mediapipe as mp
 import numpy as np
 from spotify_runner import play_ringa_ringa_on_active_device
 
-# Initialize MediaPipe Face Mesh and Hands
 mp_face_mesh = mp.solutions.face_mesh
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
-# Initialize camera
 cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
 
 if not cap.isOpened():
@@ -21,7 +19,6 @@ print("Press 'q' to quit")
 # Mouth landmark indices (lips center area)
 MOUTH_LANDMARKS = [13, 14]  # Upper and lower lip center
 
-# Distance threshold (in pixels) - adjust this value
 PROXIMITY_THRESHOLD = 80
 
 vape_check = 0
@@ -45,23 +42,18 @@ with mp_face_mesh.FaceMesh(
             print("Can't receive frame. Exiting...")
             break
 
-        # Flip the frame horizontally for a selfie-view display
         frame = cv2.flip(frame, 1)
         h, w, _ = frame.shape
 
-        # Convert to RGB for MediaPipe
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # Process face mesh
         face_results = face_mesh.process(rgb_frame)
 
-        # Process hands
         hand_results = hands.process(rgb_frame)
 
         mouth_center = None
         something_near_mouth = False
 
-        # Draw face mesh and get mouth position
         if face_results.multi_face_landmarks:
             for face_landmarks in face_results.multi_face_landmarks:
                 # Get mouth landmarks
@@ -81,10 +73,8 @@ with mp_face_mesh.FaceMesh(
                 cv2.circle(frame, tuple(mouth_center), PROXIMITY_THRESHOLD,
                           (0, 255, 0), 2)
 
-        # Draw hands and check proximity to mouth
         if hand_results.multi_hand_landmarks and mouth_center is not None:
             for hand_landmarks in hand_results.multi_hand_landmarks:
-                # Draw hand landmarks
                 mp_drawing.draw_landmarks(
                     frame,
                     hand_landmarks,
@@ -96,8 +86,7 @@ with mp_face_mesh.FaceMesh(
                     x, y = int(landmark.x * w), int(landmark.y * h)
 
                     # Calculate distance to mouth
-                    distance = np.sqrt((x - mouth_center[0])**2 +
-                                     (y - mouth_center[1])**2)
+                    distance = np.sqrt((x - mouth_center[0])**2 + (y - mouth_center[1])**2)
 
                     if distance < PROXIMITY_THRESHOLD:
                         something_near_mouth = True

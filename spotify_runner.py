@@ -22,10 +22,8 @@ def play_ringa_ringa_on_active_device():
         print("No Spotify devices found. Open Spotify on your Mac and try again.")
         return
 
-    # Prefer an active device; otherwise fall back to the first one
     device_id = next((d["id"] for d in devices if d.get("is_active")), devices[0]["id"])
 
-    # Search the track name (this is safer than hardcoding a URI)
     results = sp.search(q='track:"Ringa Ringa"', type="track", limit=1)
     items = results["tracks"]["items"]
     if not items:
@@ -34,5 +32,4 @@ def play_ringa_ringa_on_active_device():
 
     track_uri = items[0]["uri"]
 
-    # Start playback on that device
     sp.start_playback(device_id=device_id, uris=[track_uri])
