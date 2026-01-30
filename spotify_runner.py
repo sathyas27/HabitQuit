@@ -1,8 +1,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-SPOTIPY_CLIENT_ID = "5bdff7528e7b4d0ebec3e0fd649a50f0"
-SPOTIPY_CLIENT_SECRET = "d629b8e859eb493ca907a3fc18aa1fa0"
+SPOTIPY_CLIENT_ID = "SPOTIPY_CLIENT_ID"
+SPOTIPY_CLIENT_SECRET = "SPOTIPY_CLIENT_SECRET"
 SPOTIPY_REDIRECT_URI = "http://127.0.0.1:8888/callback"
 
 scope = "user-read-playback-state user-modify-playback-state"
